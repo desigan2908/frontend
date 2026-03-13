@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - Hostel Management System</title>
+  <link rel="stylesheet" href="../styles/design-system.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* ==========================================
+       LOGIN PAGE SPECIFIC STYLES
+       ========================================== */
+    
+    .login-container {
+      min-height: 100vh;
+      display: flex;
+      background: linear-gradient(135deg, var(--color-secondary) 0%, #EEF0FF 100%);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    /* Decorative shapes */
+    .decoration-top-left {
+      position: absolute;
+      top: -100px;
+      left: -100px;
+      width: 300px;
+      height: 300px;
+      background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-light) 100%);
+      border-radius: 50%;
+      opacity: 0.1;
+    }
+    
+    .decoration-bottom-right {
+      position: absolute;
+      bottom: -150px;
+      right: -150px;
+      width: 400px;
+      height: 400px;
+      background: var(--color-white);
+      border-radius: 50%;
+      opacity: 0.5;
+    }
+    
+    /* Left Panel - Form Section */
+    .login-form-panel {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: var(--space-8);
+      position: relative;
+      z-index: 1;
+    }
+    
+    .login-form-wrapper {
+      width: 100%;
+      max-width: 440px;
+      animation: slideUp 0.6s ease-out;
+    }
+    
+    .login-header {
+      margin-bottom: var(--space-8);
+    }
+    
+    .login-logo {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      margin-bottom: var(--space-6);
+    }
+    
+    .login-logo-icon {
+      width: 48px;
+      height: 48px;
+      background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-light) 100%);
+      border-radius: var(--radius-lg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--color-white);
+      font-size: var(--font-size-xl);
+    }
+    
+    .login-logo-text {
+      font-family: var(--font-family-heading);
+      font-size: var(--font-size-xl);
+      font-weight: var(--font-weight-bold);
+      color: var(--color-gray-900);
+    }
+    
+    .login-title {
+      font-size: var(--font-size-4xl);
+      font-weight: var(--font-weight-bold);
+      color: var(--color-gray-900);
+      margin-bottom: var(--space-2);
+    }
+    
+    .login-subtitle {
+      font-size: var(--font-size-base);
+      color: var(--color-gray-500);
+    }
+    
+    /* Role Selector */
+    .role-selector {
+      margin-bottom: var(--space-6);
+    }
+    
+    .role-tabs {
+      display: flex;
+      background-color: var(--color-gray-100);
+      border-radius: var(--radius-xl);
+      padding: var(--space-1);
+      gap: var(--space-1);
+    }
+    
+    .role-tab {
+      flex: 1;
+      padding: var(--space-3) var(--space-4);
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-medium);
+      color: var(--color-gray-600);
+      background: transparent;
+      border: none;
+      border-radius: var(--radius-lg);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-2);
+    }
+    
+    .role-tab:hover {
+      color: var(--color-gray-800);
+    }
+    
+    .role-tab.active {
+      background-color: var(--color-white);
+      color: var(--color-primary);
+      box-shadow: var(--shadow-sm);
+    }
+    
+    .role-tab .icon {
+      font-size: var(--font-size-lg);
+    }
+    
+    /* Login Form */
+    .login-form {
+      background-color: var(--color-white);
+      border-radius: var(--radius-2xl);
+      padding: var(--space-8);
+      box-shadow: var(--shadow-xl);
+    }
+    
+    .form-row {
+      margin-bottom: var(--space-5);
+    }
+    
+    .form-actions {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: var(--space-6);
+    }
+    
+    .remember-me {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      cursor: pointer;
+    }
+    
+    .remember-me input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--color-primary);
+      cursor: pointer;
+    }
+    
+    .remember-me span {
+      font-size: var(--font-size-sm);
+      color: var(--color-gray-600);
+    }
+    
+    .forgot-password {
+      font-size: var(--font-size-sm);
+      color: var(--color-primary);
+      font-weight: var(--font-weight-medium);
+      text-decoration: none;
+      transition: color var(--transition-fast);
+    }
+    
+    .forgot-password:hover {
+      color: var(--color-primary-dark);
+      text-decoration: underline;
+    }
+    
+    .login-btn {
+      width: 100%;
+      padding: var(--space-4);
+      font-size: var(--font-size-base);
+      margin-bottom: var(--space-6);
+    }
+    
+    /* Divider */
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: var(--space-4);
+      margin-bottom: var(--space-6);
+    }
+    
+    .divider-line {
+      flex: 1;
+      height: 1px;
+      background-color: var(--color-gray-200);
+    }
+    
+    .divider-text {
+      font-size: var(--font-size-sm);
+      color: var(--color-gray-400);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    
+    /* Social Login */
+    .social-login {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-3);
+    }
+    
+    .social-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-3);
+      width: 100%;
+      padding: var(--space-3) var(--space-4);
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-medium);
+      color: var(--color-gray-700);
+      background-color: var(--color-white);
+      border: 2px solid var(--color-gray-200);
+      border-radius: var(--radius-lg);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+    
+    .social-btn:hover {
+      background-color: var(--color-gray-50);
+      border-color: var(--color-gray-300);
+    }
+    
+    .social-btn .icon {
+      font-size: var(--font-size-lg);
+    }
+    
+    /* Right Panel - Visual Section */
+    .login-visual-panel {
+      flex: 1;
+      background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-light) 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      border-radius: var(--radius-2xl) 0 0 var(--radius-2xl);
+      margin: var(--space-4) 0 var(--space-4) 0;
+    }
+    
+    .visual-content {
+      text-align: center;
+      padding: var(--space-8);
+      color: var(--color-white);
+      position: relative;
+      z-index: 1;
+    }
+    
+    .visual-illustration {
+      max-width: 400px;
+      margin: 0 auto var(--space-8);
+    }
+    
+    .visual-title {
+      font-size: var(--font-size-3xl);
+      font-weight: var(--font-weight-bold);
+      margin-bottom: var(--space-4);
+      color: var(--color-white);
+    }
+    
+    .visual-description {
+      font-size: var(--font-size-lg);
+      opacity: 0.9;
+      line-height: var(--line-height-relaxed);
+      color: var(--color-white);
+    }
+    
+    .visual-features {
+      display: flex;
+      justify-content: center;
+      gap: var(--space-8);
+      margin-top: var(--space-8);
+    }
+    
+    .visual-feature {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--space-2);
+    }
+    
+    .feature-icon {
+      width: 56px;
+      height: 56px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: var(--radius-xl);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: var(--font-size-2xl);
+    }
+    
+    .feature-label {
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-medium);
+      opacity: 0.9;
+    }
+    
+    /* Decorative elements for visual panel */
+    .visual-decoration-1 {
+      position: absolute;
+      top: 20%;
+      left: 10%;
+      width: 80px;
+      height: 80px;
+      background: var(--color-accent-gold);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: float 3s ease-in-out infinite;
+    }
+    
+    .visual-decoration-2 {
+      position: absolute;
+      bottom: 15%;
+      right: 15%;
+      width: 60px;
+      height: 60px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 50%;
+      animation: float 4s ease-in-out infinite reverse;
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-20px); }
+    }
+    
+    /* Footer Links */
+    .login-footer {
+      margin-top: var(--space-6);
+      text-align: center;
+    }
+    
+    .login-footer-text {
+      font-size: var(--font-size-sm);
+      color: var(--color-gray-500);
+    }
+    
+    .login-footer-link {
+      color: var(--color-primary);
+      font-weight: var(--font-weight-semibold);
+      text-decoration: none;
+    }
+    
+    .login-footer-link:hover {
+      text-decoration: underline;
+    }
+    
+    /* Illustration placeholder (SVG) */
+    .illustration-placeholder {
+      width: 320px;
+      height: 320px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 120px;
+    }
+    
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .login-visual-panel {
+        display: none;
+      }
+      
+      .login-form-panel {
+        padding: var(--space-6);
+      }
+    }
+    
+    @media (max-width: 640px) {
+      .login-form-wrapper {
+        max-width: 100%;
+      }
+      
+      .login-form {
+        padding: var(--space-6);
+      }
+      
+      .login-title {
+        font-size: var(--font-size-3xl);
+      }
+      
+      .role-tabs {
+        flex-direction: column;
+      }
+      
+      .visual-features {
+        flex-direction: column;
+        gap: var(--space-4);
+      }
+    }
+  </style>
+<script src="https://sites.super.myninja.ai/_assets/ninja-daytona-script.js"></script>
+</head>
+<body>
+  <div class="login-container">
+    <!-- Decorative Elements -->
+    <div class="decoration-top-left"></div>
+    <div class="decoration-bottom-right"></div>
+    
+    <!-- Left Panel - Login Form -->
+    <div class="login-form-panel">
+      <div class="login-form-wrapper">
+        <!-- Logo -->
+        <div class="login-header">
+          <div class="login-logo">
+            <div class="login-logo-icon">🏨</div>
+            <span class="login-logo-text">HostelHub</span>
+          </div>
+          <h1 class="login-title">Welcome Back!</h1>
+          <p class="login-subtitle">Please sign in to continue to your dashboard</p>
+        </div>
+        
+        <!-- Role Selector -->
+        <div class="role-selector">
+          <div class="role-tabs">
+            <button class="role-tab" data-role="admin">
+              <span class="icon">👨‍💼</span>
+              <span>Admin</span>
+            </button>
+            <button class="role-tab active" data-role="warden">
+              <span class="icon">🛡️</span>
+              <span>Warden</span>
+            </button>
+            <button class="role-tab" data-role="student">
+              <span class="icon">🎓</span>
+              <span>Student</span>
+            </button>
+          </div>
+        </div>
+        
+        <!-- Login Form -->
+        <form class="login-form" id="loginForm">
+          <div class="form-row">
+            <label class="form-label">Username / Email</label>
+            <div class="input-wrapper">
+              <span class="icon">👤</span>
+              <input type="text" class="form-input" placeholder="Enter your username or email" required>
+            </div>
+          </div>
+          
+          <div class="form-row">
+            <label class="form-label">Password</label>
+            <div class="input-wrapper">
+              <span class="icon">🔒</span>
+              <input type="password" class="form-input has-right-icon" placeholder="Enter your password" required>
+              <span class="icon icon-right" id="togglePassword" style="cursor: pointer;">👁️</span>
+            </div>
+          </div>
+          
+          <div class="form-actions">
+            <label class="remember-me">
+              <input type="checkbox" id="rememberMe">
+              <span>Remember me</span>
+            </label>
+            <a href="#" class="forgot-password">Forgot Password?</a>
+          </div>
+          
+          <button type="submit" class="btn btn-primary login-btn">
+            Login Now
+          </button>
+          
+          <div class="divider">
+            <div class="divider-line"></div>
+            <span class="divider-text">or continue with</span>
+            <div class="divider-line"></div>
+          </div>
+          
+          <div class="social-login">
+            <button type="button" class="social-btn">
+              <span class="icon">🌐</span>
+              <span>Login with Google</span>
+            </button>
+            <button type="button" class="social-btn">
+              <span class="icon">📘</span>
+              <span>Login with Facebook</span>
+            </button>
+          </div>
+        </form>
+        
+        <!-- Footer -->
+        <div class="login-footer">
+          <p class="login-footer-text">
+            Don't have an account? 
+            <a href="register.html" class="login-footer-link">Register here</a>
+          </p>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Right Panel - Visual Section -->
+    <div class="login-visual-panel">
+      <!-- Decorative Elements -->
+      <div class="visual-decoration-1">⚡</div>
+      <div class="visual-decoration-2"></div>
+      
+      <div class="visual-content">
+        <div class="visual-illustration">
+          <div class="illustration-placeholder">👩‍🎓</div>
+        </div>
+        <h2 class="visual-title">Manage Your Hostel Life</h2>
+        <p class="visual-description">
+          Access your dashboard, track attendance, manage fees, and stay connected with your hostel community - all in one place.
+        </p>
+        
+        <div class="visual-features">
+          <div class="visual-feature">
+            <div class="feature-icon">📊</div>
+            <span class="feature-label">Dashboard</span>
+          </div>
+          <div class="visual-feature">
+            <div class="feature-icon">📅</div>
+            <span class="feature-label">Attendance</span>
+          </div>
+          <div class="visual-feature">
+            <div class="feature-icon">💳</div>
+            <span class="feature-label">Payments</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    // Role Tab Switching
+    const roleTabs = document.querySelectorAll('.role-tab');
+    roleTabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        roleTabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+      });
+    });
+    
+    // Password Toggle
+    const togglePassword = document.getElementById('togglePassword');
+    const passwordInput = togglePassword.previousElementSibling;
+    
+    togglePassword.addEventListener('click', () => {
+      const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+      passwordInput.setAttribute('type', type);
+      togglePassword.textContent = type === 'password' ? '👁️' : '🙈';
+    });
+    
+    // Form Submission
+    document.getElementById('loginForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const activeRole = document.querySelector('.role-tab.active').dataset.role;
+      console.log('Logging in as:', activeRole);
+      // Redirect based on role
+      if (activeRole === 'student') {
+        window.location.href = 'dashboard.html';
+      } else if (activeRole === 'admin') {
+        window.location.href = 'admin-dashboard.html';
+      } else {
+        window.location.href = 'warden-dashboard.html';
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,1325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Dashboard - Hostel Management System</title>
+  <link rel="stylesheet" href="../styles/design-system.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* ==========================================
+       DASHBOARD LAYOUT STYLES
+       ========================================== */
+    
+    .dashboard-container {
+      display: flex;
+      min-height: 100vh;
+      background-color: var(--color-secondary);
+    }
+    
+    /* ==========================================
+       SIDEBAR NAVIGATION
+       ========================================== */
+    
+    .sidebar {
+      width: var(--sidebar-width);
+      background-color: var(--color-white);
+      border-right: 1px solid var(--color-gray-100);
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100vh;
+      z-index: var(--z-fixed);
+      transition: width var(--transition-normal);
+    }
+    
+    .sidebar-header {
+      padding: var(--space-5) var(--space-6);
+      border-bottom: 1px solid var(--color-gray-100);
+    }
+    
+    .sidebar-logo {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+    }
+    
+    .sidebar-logo-icon {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-light) 100%);
+      border-radius: var(--radius-lg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--color-white);
+      font-size: var(--font-size-lg);
+    }
+    
+    .sidebar-logo-text {
+      font-family: var(--font-family-heading);
+      font-size: var(--font-size-lg);
+      font-weight: var(--font-weight-bold);
+      color: var(--color-gray-900);
+    }
+    
+    .sidebar-nav {
+      flex: 1;
+      padding: var(--space-4);
+      overflow-y: auto;
+    }
+    
+    .nav-section {
+      margin-bottom: var(--space-6);
+    }
+    
+    .nav-section-title {
+      font-size: var(--font-size-xs);
+      font-weight: var(--font-weight-semibold);
+      color: var(--color-gray-400);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      padding: var(--space-2) var(--space-4);
+      margin-bottom: var(--space-2);
+    }
+    
+    .sidebar-footer {
+      padding: var(--space-4) var(--space-6);
+      border-top: 1px solid var(--color-gray-100);
+    }
+    
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+    }
+    
+    .user-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: var(--radius-full);
+      background: linear-gradient(135deg, var(--color-primary-light) 0%, var(--color-primary) 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--color-white);
+      font-weight: var(--font-weight-semibold);
+      font-size: var(--font-size-sm);
+    }
+    
+    .user-details {
+      flex: 1;
+    }
+    
+    .user-name {
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-semibold);
+      color: var(--color-gray-900);
+    }
+    
+    .user-role {
+      font-size: var(--font-size-xs);
+      color: var(--color-gray-500);
+    }
+    
+    /* ==========================================
+       MAIN CONTENT AREA
+       ========================================== */
+    
+    .main-content {
+      flex: 1;
+      margin-left: var(--sidebar-width);
+      display: flex;
+      flex-direction: column;
+    }
+    
+    /* Header */
+    .dashboard-header {
+      background-color: var(--color-white);
+      padding: var(--space-4) var(--space-8);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--color-gray-100);
+      position: sticky;
+      top: 0;
+      z-index: var(--z-sticky);
+    }
+    
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: var(--space-4);
+    }
+    
+    .menu-toggle {
+      display: none;
+      background: none;
+      border: none;
+      font-size: var(--font-size-xl);
+      cursor: pointer;
+      color: var(--color-gray-600);
+    }
+    
+    .page-title {
+      font-size: var(--font-size-xl);
+      font-weight: var(--font-weight-semibold);
+      color: var(--color-gray-900);
+    }
+    
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: var(--space-4);
+    }
+    
+    .header-search {
+      position: relative;
+    }
+    
+    .header-search input {
+      width: 240px;
+      padding: var(--space-2) var(--space-4) var(--space-2) var(--space-10);
+      background-color: var(--color-gray-100);
+      border: none;
+      border-radius: var(--radius-full);
+      font-size: var(--font-size-sm);
+      color: var(--color-gray-700);
+      transition: all var(--transition-fast);
+    }
+    
+    .header-search input:focus {
+      width: 300px;
+      background-color: var(--color-white);
+      box-shadow: var(--shadow-md);
+      outline: none;
+    }
+    
+    .header-search .search-icon {
+      position: absolute;
+      left: var(--space-4);
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--color-gray-400);
+    }
+    
+    .header-icon-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: var(--radius-full);
+      background-color: var(--color-gray-100);
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: var(--font-size-lg);
+      transition: all var(--transition-fast);
+      position: relative;
+    }
+    
+    .header-icon-btn:hover {
+      background-color: var(--color-gray-200);
+    }
+    
+    .notification-badge {
+      position: absolute;
+      top: -4px;
+      right: -4px;
+      width: 18px;
+      height: 18px;
+      background-color: var(--color-error);
+      border-radius: var(--radius-full);
+      color: var(--color-white);
+      font-size: 10px;
+      font-weight: var(--font-weight-bold);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    /* Dashboard Content */
+    .dashboard-content {
+      padding: var(--space-8);
+      flex: 1;
+    }
+    
+    /* ==========================================
+       PROFILE CARD
+       ========================================== */
+    
+    .profile-section {
+      display: grid;
+      grid-template-columns: 1fr 1.5fr;
+      gap: var(--space-6);
+      margin-bottom: var(--space-8);
+    }
+    
+    .profile-card {
+      background-color: var(--color-white);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+    }
+    
+    .profile-header {
+      background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-light) 100%);
+      padding: var(--space-8) var(--space-6) var(--space-12);
+      text-align: center;
+      position: relative;
+    }
+    
+    .profile-avatar {
+      width: 100px;
+      height: 100px;
+      border-radius: var(--radius-full);
+      border: 4px solid var(--color-white);
+      background-color: var(--color-white);
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 40px;
+      position: absolute;
+      bottom: -50px;
+      left: 50%;
+      transform: translateX(-50%);
+      box-shadow: var(--shadow-lg);
+    }
+    
+    .profile-body {
+      padding: var(--space-12) var(--space-6) var(--space-6);
+      text-align: center;
+    }
+    
+    .profile-name {
+      font-size: var(--font-size-xl);
+      font-weight: var(--font-weight-semibold);
+      color: var(--color-gray-900);
+      margin-bottom: var(--space-1);
+    }
+    
+    .profile-roll {
+      font-size: var(--font-size-sm);
+      color: var(--color-gray-500);
+      margin-bottom: var(--space-4);
+    }
+    
+    .profile-details {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-4);
+      padding-top: var(--space-4);
+      border-top: 1px solid var(--color-gray-100);
+    }
+    
+    .detail-item {
+      text-align: center;
+    }
+    
+    .detail-label {
+      font-size: var(--font-size-xs);
+      color: var(--color-gray-400);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: var(--space-1);
+    }
+    
+    .detail-value {
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-semibold);
+      color: var(--color-gray-800);
+    }
+    
+    /* Quick Actions Card */
+    .quick-actions-card {
+      background-color: var(--color-white);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-sm);
+      padding: var(--space-6);
+    }
+    
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: var(--space-5);
+    }
+    
+    .section-title {
+      font-size: var(--font-size-lg);
+      font-weight: var(--font-weight-semibold);
+      color: var(--color-gray-900);
+    }
+    
+    .quick-actions-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--space-4);
+    }
+    
+    .quick-action-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: var(--space-5);
+      background-color: var(--color-gray-50);
+      border: 2px solid var(--color-gray-100);
+      border-radius: var(--radius-xl);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      text-decoration: none;
+    }
+    
+    .quick-action-btn:hover {
+      background-color: var(--color-primary);
+      border-color: var(--color-primary);
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-primary);
+    }
+    
+    .quick-action-btn:hover .action-icon,
+    .quick-action-btn:hover .action-label {
+      color: var(--color-white);
+    }
+    
+    .action-icon {
+      font-size: 28px;
+      margin-bottom: var(--space-2);
+      transition: color var(--transition-fast);
+    }
+    
+    .action-label {
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-medium);
+      color: var(--color-gray-700);
+      transition: color var(--transition-fast);
+    }
+    
+    /* ==========================================
+       STATS CARDS
+       ========================================== */
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--space-6);
+      margin-bottom: var(--space-8);
+    }
+    
+    .stat-card {
+      background-color: var(--color-white);
+      border-radius: var(--radius-xl);
+      padding: var(--space-6);
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      align-items: center;
+      gap: var(--space-4);
+      transition: all var(--transition-fast);
+    }
+    
+    .stat-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-lg);
+    }
+    
+    .stat-icon {
+      width: 56px;
+      height: 56px;
+      border-radius: var(--radius-xl);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+    }
+    
+    .stat-icon.purple {
+      background-color: rgba(108, 99, 255, 0.1);
+      color: var(--color-primary);
+    }
+    
+    .stat-icon.green {
+      background-color: rgba(16, 185, 129, 0.1);
+      color: var(--color-success);
+    }
+    
+    .stat-icon.gold {
+      background-color: rgba(255, 182, 72, 0.1);
+      color: var(--color-accent-gold);
+    }
+    
+    .stat-icon.blue {
+      background-color: rgba(59, 130, 246, 0.1);
+      color: var(--color-info);
+    }
+    
+    .stat-content {
+      flex: 1;
+    }
+    
+    .stat-value {
+      font-size: var(--font-size-2xl);
+      font-weight: var(--font-weight-bold);
+      color: var(--color-gray-900);
+    }
+    
+    .stat-label {
+      font-size: var(--font-size-sm);
+      color: var(--color-gray-500);
+    }
+    
+    /* ==========================================
+       CONTENT GRID (Attendance & Fees)
+       ========================================== */
+    
+    .content-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-6);
+      margin-bottom: var(--space-8);
+    }
+    
+    /* Attendance Card */
+    .attendance-card {
+      background-color: var(--color-white);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-sm);
+      padding: var(--space-6);
+    }
+    
+    .attendance-percentage {
+      display: flex;
+      align-items: center;
+      gap: var(--space-6);
+      margin-bottom: var(--space-6);
+    }
+    
+    .percentage-circle {
+      width: 120px;
+      height: 120px;
+      position: relative;
+    }
+    
+    .percentage-circle svg {
+      transform: rotate(-90deg);
+    }
+    
+    .percentage-circle .bg {
+      fill: none;
+      stroke: var(--color-gray-100);
+      stroke-width: 8;
+    }
+    
+    .percentage-circle .progress {
+      fill: none;
+      stroke: var(--color-success);
+      stroke-width: 8;
+      stroke-linecap: round;
+      stroke-dasharray: 314;
+      stroke-dashoffset: 47;
+      transition: stroke-dashoffset 1s ease-out;
+    }
+    
+    .percentage-value {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: var(--font-size-2xl);
+      font-weight: var(--font-weight-bold);
+      color: var(--color-gray-900);
+    }
+    
+    .attendance-details {
+      flex: 1;
+    }
+    
+    .attendance-row {
+      display: flex;
+      justify-content: space-between;
+      padding: var(--space-2) 0;
+      border-bottom: 1px solid var(--color-gray-100);
+    }
+    
+    .attendance-row:last-child {
+      border-bottom: none;
+    }
+    
+    .attendance-label {
+      font-size: var(--font-size-sm);
+      color: var(--color-gray-500);
+    }
+    
+    .attendance-value {
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-semibold);
+      color: var(--color-gray-800);
+    }
+    
+    /* Calendar View */
+    .calendar-mini {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: var(--space-1);
+      margin-top: var(--space-4);
+    }
+    
+    .calendar-day-name {
+      font-size: var(--font-size-xs);
+      color: var(--color-gray-400);
+      text-align: center;
+      padding: var(--space-2);
+    }
+    
+    .calendar-day {
+      aspect-ratio: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: var(--font-size-sm);
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+    
+    .calendar-day:hover {
+      background-color: var(--color-gray-100);
+    }
+    
+    .calendar-day.present {
+      background-color: var(--color-success-light);
+      color: var(--color-success);
+      font-weight: var(--font-weight-semibold);
+    }
+    
+    .calendar-day.absent {
+      background-color: var(--color-error-light);
+      color: var(--color-error);
+      font-weight: var(--font-weight-semibold);
+    }
+    
+    .calendar-day.today {
+      border: 2px solid var(--color-primary);
+      font-weight: var(--font-weight-semibold);
+    }
+    
+    /* Fee Payment Card */
+    .fees-card {
+      background-color: var(--color-white);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-sm);
+      padding: var(--space-6);
+    }
+    
+    .fees-table {
+      width: 100%;
+    }
+    
+    .fees-table th {
+      font-size: var(--font-size-xs);
+      font-weight: var(--font-weight-semibold);
+      color: var(--color-gray-500);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: var(--space-3);
+      text-align: left;
+      border-bottom: 1px solid var(--color-gray-200);
+    }
+    
+    .fees-table td {
+      padding: var(--space-3);
+      font-size: var(--font-size-sm);
+      color: var(--color-gray-700);
+      border-bottom: 1px solid var(--color-gray-100);
+    }
+    
+    .fees-table tbody tr:hover {
+      background-color: var(--color-gray-50);
+    }
+    
+    .status-paid {
+      color: var(--color-success);
+      font-weight: var(--font-weight-semibold);
+    }
+    
+    .status-pending {
+      color: var(--color-warning);
+      font-weight: var(--font-weight-semibold);
+    }
+    
+    .status-overdue {
+      color: var(--color-error);
+      font-weight: var(--font-weight-semibold);
+    }
+    
+    /* ==========================================
+       PARENT/GUARDIAN INFO
+       ========================================== */
+    
+    .guardian-card {
+      background-color: var(--color-white);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-sm);
+      padding: var(--space-6);
+    }
+    
+    .guardian-info {
+      display: flex;
+      gap: var(--space-6);
+    }
+    
+    .guardian-avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: var(--radius-full);
+      background-color: var(--color-gray-100);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+    }
+    
+    .guardian-details {
+      flex: 1;
+    }
+    
+    .guardian-name {
+      font-size: var(--font-size-lg);
+      font-weight: var(--font-weight-semibold);
+      color: var(--color-gray-900);
+      margin-bottom: var(--space-1);
+    }
+    
+    .guardian-relation {
+      font-size: var(--font-size-sm);
+      color: var(--color-gray-500);
+      margin-bottom: var(--space-4);
+    }
+    
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-4);
+    }
+    
+    .contact-item {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+    }
+    
+    .contact-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: var(--radius-md);
+      background-color: var(--color-gray-100);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: var(--font-size-base);
+    }
+    
+    .contact-text {
+      font-size: var(--font-size-sm);
+      color: var(--color-gray-600);
+    }
+    
+    /* ==========================================
+       NOTICES SECTION
+       ========================================== */
+    
+    .notices-card {
+      background-color: var(--color-white);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-sm);
+      padding: var(--space-6);
+      margin-top: var(--space-6);
+    }
+    
+    .notice-item {
+      display: flex;
+      gap: var(--space-4);
+      padding: var(--space-4);
+      border-radius: var(--radius-lg);
+      margin-bottom: var(--space-3);
+      background-color: var(--color-gray-50);
+      transition: all var(--transition-fast);
+    }
+    
+    .notice-item:hover {
+      background-color: var(--color-gray-100);
+    }
+    
+    .notice-date {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: var(--space-2) var(--space-3);
+      background-color: var(--color-primary);
+      border-radius: var(--radius-md);
+      color: var(--color-white);
+      min-width: 50px;
+    }
+    
+    .notice-day {
+      font-size: var(--font-size-xl);
+      font-weight: var(--font-weight-bold);
+      line-height: 1;
+    }
+    
+    .notice-month {
+      font-size: var(--font-size-xs);
+      text-transform: uppercase;
+    }
+    
+    .notice-content {
+      flex: 1;
+    }
+    
+    .notice-title {
+      font-size: var(--font-size-base);
+      font-weight: var(--font-weight-semibold);
+      color: var(--color-gray-900);
+      margin-bottom: var(--space-1);
+    }
+    
+    .notice-desc {
+      font-size: var(--font-size-sm);
+      color: var(--color-gray-500);
+    }
+    
+    /* ==========================================
+       LOGOUT DROPDOWN
+       ========================================== */
+    
+    .logout-btn {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      width: 100%;
+      padding: var(--space-3) var(--space-4);
+      font-size: var(--font-size-sm);
+      color: var(--color-error);
+      background: none;
+      border: none;
+      border-radius: var(--radius-lg);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      margin-top: var(--space-2);
+    }
+    
+    .logout-btn:hover {
+      background-color: var(--color-error-light);
+    }
+    
+    /* ==========================================
+       RESPONSIVE STYLES
+       ========================================== */
+    
+    @media (max-width: 1280px) {
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      
+      .quick-actions-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    
+    @media (max-width: 1024px) {
+      .sidebar {
+        width: 80px;
+      }
+      
+      .sidebar-logo-text,
+      .nav-section-title,
+      .nav-link span,
+      .user-details {
+        display: none;
+      }
+      
+      .nav-link {
+        justify-content: center;
+        padding: var(--space-3);
+      }
+      
+      .sidebar-header {
+        padding: var(--space-4);
+        justify-content: center;
+      }
+      
+      .sidebar-footer {
+        padding: var(--space-3);
+        justify-content: center;
+      }
+      
+      .user-info {
+        justify-content: center;
+      }
+      
+      .main-content {
+        margin-left: 80px;
+      }
+      
+      .profile-section {
+        grid-template-columns: 1fr;
+      }
+      
+      .content-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .sidebar {
+        transform: translateX(-100%);
+        width: 280px;
+      }
+      
+      .sidebar.active {
+        transform: translateX(0);
+      }
+      
+      .sidebar-logo-text,
+      .nav-section-title,
+      .nav-link span,
+      .user-details {
+        display: block;
+      }
+      
+      .nav-link {
+        justify-content: flex-start;
+        padding: var(--space-3) var(--space-4);
+      }
+      
+      .main-content {
+        margin-left: 0;
+      }
+      
+      .menu-toggle {
+        display: block;
+      }
+      
+      .header-search {
+        display: none;
+      }
+      
+      .dashboard-content {
+        padding: var(--space-4);
+      }
+      
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .quick-actions-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      
+      .contact-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .guardian-info {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+    }
+  </style>
+<script src="https://sites.super.myninja.ai/_assets/ninja-daytona-script.js"></script>
+</head>
+<body>
+  <div class="dashboard-container">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">
+          <div class="sidebar-logo-icon">🏨</div>
+          <span class="sidebar-logo-text">HostelHub</span>
+        </div>
+      </div>
+      
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <div class="nav-section-title">Main Menu</div>
+          <a href="#" class="nav-link active">
+            <span class="icon">📊</span>
+            <span>Dashboard</span>
+          </a>
+          <a href="#" class="nav-link">
+            <span class="icon">👤</span>
+            <span>My Profile</span>
+          </a>
+          <a href="#" class="nav-link">
+            <span class="icon">📅</span>
+            <span>Attendance</span>
+          </a>
+          <a href="#" class="nav-link">
+            <span class="icon">💳</span>
+            <span>Fee Payments</span>
+          </a>
+        </div>
+        
+        <div class="nav-section">
+          <div class="nav-section-title">Services</div>
+          <a href="#" class="nav-link">
+            <span class="icon">🍽️</span>
+            <span>Mess Menu</span>
+          </a>
+          <a href="#" class="nav-link">
+            <span class="icon">🔧</span>
+            <span>Complaints</span>
+          </a>
+          <a href="#" class="nav-link">
+            <span class="icon">📋</span>
+            <span>Notices</span>
+          </a>
+          <a href="#" class="nav-link">
+            <span class="icon">🚪</span>
+            <span>Room Details</span>
+          </a>
+        </div>
+        
+        <div class="nav-section">
+          <div class="nav-section-title">Support</div>
+          <a href="#" class="nav-link">
+            <span class="icon">❓</span>
+            <span>Help Center</span>
+          </a>
+          <a href="#" class="nav-link">
+            <span class="icon">⚙️</span>
+            <span>Settings</span>
+          </a>
+        </div>
+      </nav>
+      
+      <div class="sidebar-footer">
+        <div class="user-info">
+          <div class="user-avatar">JS</div>
+          <div class="user-details">
+            <div class="user-name">John Smith</div>
+            <div class="user-role">Student</div>
+          </div>
+        </div>
+        <button class="logout-btn" onclick="window.location.href='login.html'">
+          <span>🚪</span>
+          <span>Logout</span>
+        </button>
+      </div>
+    </aside>
+    
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Header -->
+      <header class="dashboard-header">
+        <div class="header-left">
+          <button class="menu-toggle" id="menuToggle">☰</button>
+          <h1 class="page-title">Dashboard</h1>
+        </div>
+        <div class="header-right">
+          <div class="header-search">
+            <span class="search-icon">🔍</span>
+            <input type="text" placeholder="Search...">
+          </div>
+          <button class="header-icon-btn">
+            🔔
+            <span class="notification-badge">3</span>
+          </button>
+          <button class="header-icon-btn">
+            ✉️
+          </button>
+        </div>
+      </header>
+      
+      <!-- Dashboard Content -->
+      <div class="dashboard-content">
+        <!-- Profile Section -->
+        <div class="profile-section">
+          <!-- Student Profile Card -->
+          <div class="profile-card">
+            <div class="profile-header">
+              <div class="profile-avatar">👨‍🎓</div>
+            </div>
+            <div class="profile-body">
+              <h2 class="profile-name">John Smith</h2>
+              <p class="profile-roll">Roll No: CS2024001</p>
+              <div class="profile-details">
+                <div class="detail-item">
+                  <div class="detail-label">Department</div>
+                  <div class="detail-value">Computer Science</div>
+                </div>
+                <div class="detail-item">
+                  <div class="detail-label">Year</div>
+                  <div class="detail-value">2nd Year</div>
+                </div>
+                <div class="detail-item">
+                  <div class="detail-label">Room</div>
+                  <div class="detail-value">A-204</div>
+                </div>
+                <div class="detail-item">
+                  <div class="detail-label">Block</div>
+                  <div class="detail-value">Block A</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Quick Actions Card -->
+          <div class="quick-actions-card">
+            <div class="section-header">
+              <h3 class="section-title">Quick Actions</h3>
+            </div>
+            <div class="quick-actions-grid">
+              <a href="#" class="quick-action-btn">
+                <span class="action-icon">💳</span>
+                <span class="action-label">Pay Fees</span>
+              </a>
+              <a href="#" class="quick-action-btn">
+                <span class="action-icon">📢</span>
+                <span class="action-label">Report Issue</span>
+              </a>
+              <a href="#" class="quick-action-btn">
+                <span class="action-icon">📋</span>
+                <span class="action-label">View Notices</span>
+              </a>
+              <a href="#" class="quick-action-btn">
+                <span class="action-icon">🍽️</span>
+                <span class="action-label">Mess Menu</span>
+              </a>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Stats Grid -->
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-icon purple">📅</div>
+            <div class="stat-content">
+              <div class="stat-value">85%</div>
+              <div class="stat-label">Attendance Rate</div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon green">✅</div>
+            <div class="stat-content">
+              <div class="stat-value">₹45,000</div>
+              <div class="stat-label">Fees Paid</div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon gold">⏳</div>
+            <div class="stat-content">
+              <div class="stat-value">₹15,000</div>
+              <div class="stat-label">Pending Dues</div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon blue">🔧</div>
+            <div class="stat-content">
+              <div class="stat-value">2</div>
+              <div class="stat-label">Active Complaints</div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Content Grid (Attendance & Fees) -->
+        <div class="content-grid">
+          <!-- Attendance Card -->
+          <div class="attendance-card">
+            <div class="section-header">
+              <h3 class="section-title">Attendance Overview</h3>
+              <a href="#" class="text-primary text-sm font-medium">View Details →</a>
+            </div>
+            <div class="attendance-percentage">
+              <div class="percentage-circle">
+                <svg viewBox="0 0 100 100">
+                  <circle class="bg" cx="50" cy="50" r="45"></circle>
+                  <circle class="progress" cx="50" cy="50" r="45"></circle>
+                </svg>
+                <div class="percentage-value">85%</div>
+              </div>
+              <div class="attendance-details">
+                <div class="attendance-row">
+                  <span class="attendance-label">Total Classes</span>
+                  <span class="attendance-value">120</span>
+                </div>
+                <div class="attendance-row">
+                  <span class="attendance-label">Present</span>
+                  <span class="attendance-value" style="color: var(--color-success);">102</span>
+                </div>
+                <div class="attendance-row">
+                  <span class="attendance-label">Absent</span>
+                  <span class="attendance-value" style="color: var(--color-error);">18</span>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Mini Calendar -->
+            <div class="calendar-mini">
+              <div class="calendar-day-name">S</div>
+              <div class="calendar-day-name">M</div>
+              <div class="calendar-day-name">T</div>
+              <div class="calendar-day-name">W</div>
+              <div class="calendar-day-name">T</div>
+              <div class="calendar-day-name">F</div>
+              <div class="calendar-day-name">S</div>
+              <div class="calendar-day present">1</div>
+              <div class="calendar-day present">2</div>
+              <div class="calendar-day present">3</div>
+              <div class="calendar-day absent">4</div>
+              <div class="calendar-day present">5</div>
+              <div class="calendar-day present">6</div>
+              <div class="calendar-day">7</div>
+              <div class="calendar-day present">8</div>
+              <div class="calendar-day present">9</div>
+              <div class="calendar-day today">10</div>
+              <div class="calendar-day">11</div>
+              <div class="calendar-day">12</div>
+              <div class="calendar-day">13</div>
+              <div class="calendar-day">14</div>
+            </div>
+          </div>
+          
+          <!-- Fee Payment Card -->
+          <div class="fees-card">
+            <div class="section-header">
+              <h3 class="section-title">Fee Payment History</h3>
+              <a href="#" class="text-primary text-sm font-medium">View All →</a>
+            </div>
+            <table class="fees-table">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Description</th>
+                  <th>Amount</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>15 Jan 2024</td>
+                  <td>Hostel Fee - Semester 3</td>
+                  <td>₹25,000</td>
+                  <td class="status-paid">Paid ✓</td>
+                </tr>
+                <tr>
+                  <td>15 Jul 2023</td>
+                  <td>Hostel Fee - Semester 2</td>
+                  <td>₹25,000</td>
+                  <td class="status-paid">Paid ✓</td>
+                </tr>
+                <tr>
+                  <td>15 Jan 2023</td>
+                  <td>Hostel Fee - Semester 1</td>
+                  <td>₹20,000</td>
+                  <td class="status-paid">Paid ✓</td>
+                </tr>
+                <tr>
+                  <td>15 Feb 2024</td>
+                  <td>Mess Fee - Feb 2024</td>
+                  <td>₹5,000</td>
+                  <td class="status-pending">Pending</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        
+        <!-- Parent/Guardian Information -->
+        <div class="guardian-card">
+          <div class="section-header">
+            <h3 class="section-title">Parent / Guardian Information</h3>
+            <a href="#" class="text-primary text-sm font-medium">Edit →</a>
+          </div>
+          <div class="guardian-info">
+            <div class="guardian-avatar">👨</div>
+            <div class="guardian-details">
+              <h4 class="guardian-name">Robert Smith</h4>
+              <p class="guardian-relation">Father</p>
+              <div class="contact-grid">
+                <div class="contact-item">
+                  <div class="contact-icon">📞</div>
+                  <div class="contact-text">+91 98765 43210</div>
+                </div>
+                <div class="contact-item">
+                  <div class="contact-icon">📧</div>
+                  <div class="contact-text">robert.smith@email.com</div>
+                </div>
+                <div class="contact-item">
+                  <div class="contact-icon">📍</div>
+                  <div class="contact-text">123 Main Street, Mumbai</div>
+                </div>
+                <div class="contact-item">
+                  <div class="contact-icon">💼</div>
+                  <div class="contact-text">Business Owner</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Notices Section -->
+        <div class="notices-card">
+          <div class="section-header">
+            <h3 class="section-title">Recent Notices</h3>
+            <a href="#" class="text-primary text-sm font-medium">View All →</a>
+          </div>
+          <div class="notice-item">
+            <div class="notice-date">
+              <span class="notice-day">10</span>
+              <span class="notice-month">Feb</span>
+            </div>
+            <div class="notice-content">
+              <h4 class="notice-title">Hostel Day Celebration</h4>
+              <p class="notice-desc">Annual hostel day celebration will be held on February 20th. All students are requested to participate.</p>
+            </div>
+          </div>
+          <div class="notice-item">
+            <div class="notice-date">
+              <span class="notice-day">08</span>
+              <span class="notice-month">Feb</span>
+            </div>
+            <div class="notice-content">
+              <h4 class="notice-title">Mess Timing Change</h4>
+              <p class="notice-desc">Due to maintenance work, dinner timings have been changed to 7:30 PM - 9:00 PM from Feb 10-15.</p>
+            </div>
+          </div>
+          <div class="notice-item">
+            <div class="notice-date">
+              <span class="notice-day">05</span>
+              <span class="notice-month">Feb</span>
+            </div>
+            <div class="notice-content">
+              <h4 class="notice-title">Fee Payment Reminder</h4>
+              <p class="notice-desc">Last date for mess fee payment is February 15th. Please clear your dues to avoid late fees.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+  
+  <script>
+    // Mobile Menu Toggle
+    const menuToggle = document.getElementById('menuToggle');
+    const sidebar = document.getElementById('sidebar');
+    
+    menuToggle.addEventListener('click', () => {
+      sidebar.classList.toggle('active');
+    });
+    
+    // Close sidebar when clicking outside on mobile
+    document.addEventListener('click', (e) => {
+      if (window.innerWidth <= 768) {
+        if (!sidebar.contains(e.target) && !menuToggle.contains(e.target)) {
+          sidebar.classList.remove('active');
+        }
+      }
+    });
+  </script>
+</body>
+</html>
